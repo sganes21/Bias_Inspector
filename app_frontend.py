@@ -8,7 +8,7 @@ import nltk
 # --- NLTK resource downloads to fix 'punkt_tab' error ---
 # This will download the necessary tokenizer data if not already available.
 nltk.download('punkt')
-#nltk.download('punkt_tab')
+nltk.download('punkt_tab')
 
 # --- Setup ---
 
