@@ -5,25 +5,25 @@ import os
 from openai import OpenAI
 import nltk
 
-# --- NLTK resource downloads to fix 'punkt_tab' error ---
-# This will download the necessary tokenizer data if not already available.
+# Downloading NLTK resource 
+
 nltk.download('punkt')
 nltk.download('punkt_tab')
 
-# --- Setup ---
+# Bias Inspector Title & Subtitle
 
 st.title("Bias Inspector")
 st.write("Let's Get Biased!")
 
-# Initialize OpenAI client once
-#api_key = os.getenv("OPENAI_API_KEY")
-#client = OpenAI(api_key=api_key)
+# Taking in API key as environmental variable
 
 api_key = st.secrets["OPENAI_API_KEY"]
 client = OpenAI(api_key=api_key)
+
+# Setting up pre-trained model
 model_name = "ft:gpt-4.1-mini-2025-04-14:duke-university::C0Gn9Szw"
 
-# --- Article extraction using newspaper3k ---
+# Extracting article title, source,heading, tags, text using python library
 
 def scrape_article(url):
     try:
@@ -52,7 +52,7 @@ def scrape_article(url):
         "text": text,
     }
 
-# --- Prompt formatting as per fine-tuning ---
+# Setting up prompt
 
 def create_prompt(article_data):
     return f"""
@@ -68,7 +68,7 @@ Answer ONLY with EXACTLY one of these bias labels: "left", "center", or "right".
 Do NOT provide any additional explanation or text.
 """
 
-# --- Model inference ---
+# Predicting bias using model
 
 def get_bias_prediction(prompt):
     try:
@@ -87,7 +87,7 @@ def get_bias_prediction(prompt):
         st.error(f"Error calling bias model: {e}")
         return "error"
 
-# --- Streamlit UI and workflow ---
+# App front end inputs
 
 url_input = st.text_input("Please input the URL to your news article:")
 
@@ -106,7 +106,7 @@ if st.button("Analyze Bias") and url_input:
 elif url_input:
     st.info("After entering a URL, click 'Analyze Bias' to get the prediction.")
 
-st.caption("Powered by OpenAI. Supports major news sites. Python newspaper4k library manages text extration. Results may depend on extraction quality.")
+st.caption("Powered by OpenAI. Supports major news sites. Python newspaper4k library manages text extraction. Results may depend on extraction quality.")
 
 
 
